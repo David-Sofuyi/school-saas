@@ -6,10 +6,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from apps.accounts.views import LoginView, LogoutView
 
 urlpatterns = [
     # Admin
     path("admin/", admin.site.urls),
+    
+    # Direct Auth Shortcuts
+    path("login/", LoginView.as_view(), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
+
     # API v1 Endpoints
     path("api/v1/core/", include("apps.core.api.urls")),
     path("api/v1/accounts/", include("apps.accounts.api.urls")),
@@ -28,7 +34,8 @@ urlpatterns = [
     path("api/v1/subscriptions/", include("apps.subscriptions.api.urls")),
     path("api/v1/audit/", include("apps.audit.api.urls")),
     path("api/v1/notifications/", include("apps.notifications.api.urls")),
-    # Web URLs & Dashboards
+
+    # Web Portals & Dashboards
     path("", include("apps.dashboards.urls")),
     path("accounts/", include("apps.accounts.urls")),
     path("schools/", include("apps.schools.urls")),
@@ -48,16 +55,13 @@ urlpatterns = [
     path("notifications/", include("apps.notifications.urls")),
 ]
 
-# Serve static and media files in development
+# Serve media files in development
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
     try:
         import debug_toolbar  # noqa: F401
-
-        urlpatterns = [
-            path("__debug__/", include("debug_toolbar.urls")),
-        ] + urlpatterns
+        urlpatterns = [path("__debug__/", include("debug_toolbar.urls"))] + urlpatterns
     except ImportError:
         pass
