@@ -1,0 +1,667 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduNaija SaaS | Modern Nigerian School Management Platform</title>
+    <link rel="icon" type="image/png" href="{% static 'images/icon-192.png' %}">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        :root {
+            --primary-green: #0a5c36;
+            --primary-dark: #063d24;
+            --accent-gold: #f59e0b;
+            --accent-light: #e6f4ea;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --bg-light: #f9fafb;
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar-landing {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .navbar-brand-text {
+            font-weight: 800;
+            font-size: 1.45rem;
+            color: var(--primary-green);
+            letter-spacing: -0.5px;
+        }
+        .navbar-brand-badge {
+            background-color: var(--accent-light);
+            color: var(--primary-green);
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #fefce8 100%);
+            padding: 120px 0 80px 0;
+            position: relative;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        .hero-title {
+            font-size: 3.25rem;
+            font-weight: 800;
+            line-height: 1.18;
+            color: #111827;
+            letter-spacing: -1px;
+        }
+        .hero-title span {
+            color: var(--primary-green);
+        }
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 620px;
+        }
+
+        .btn-green {
+            background-color: var(--primary-green);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 10px;
+            border: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(10, 92, 54, 0.25);
+        }
+        .btn-green:hover {
+            background-color: var(--primary-dark);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 92, 54, 0.35);
+        }
+
+        .btn-outline-custom {
+            border: 2px solid #e5e7eb;
+            color: #374151;
+            font-weight: 600;
+            padding: 11px 26px;
+            border-radius: 10px;
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-outline-custom:hover {
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+            background: #f0fdf4;
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            background: #ffffff;
+            border: 1px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 32px 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+            border-color: #d1fae5;
+        }
+        .feature-icon-wrapper {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+        .icon-green { background: #dcfce7; color: #15803d; }
+        .icon-amber { background: #fef3c7; color: #b45309; }
+        .icon-blue { background: #dbeafe; color: #1d4ed8; }
+        .icon-purple { background: #f3e8ff; color: #7e22ce; }
+        .icon-rose { background: #ffe4e6; color: #be123c; }
+        .icon-teal { background: #ccfbf1; color: #0f766e; }
+
+        /* Portal Pills */
+        .portal-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 24px;
+            transition: all 0.25s ease;
+        }
+        .portal-card:hover {
+            border-color: var(--primary-green);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Pricing Card */
+        .pricing-card {
+            border-radius: 20px;
+            border: 1px solid #e5e7eb;
+            padding: 40px 30px;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .pricing-card.featured {
+            border: 2px solid var(--primary-green);
+            box-shadow: 0 20px 25px -5px rgba(10, 92, 54, 0.12);
+            transform: scale(1.03);
+        }
+        .pricing-tag {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-green);
+            color: #ffffff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        .footer-landing {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 60px 0 30px 0;
+        }
+        .footer-landing h5 {
+            color: #f8fafc;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .footer-landing a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-landing a:hover {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-landing">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+                <i class="bi bi-mortarboard-fill text-success fs-3"></i>
+                <span class="navbar-brand-text">EduNaija</span>
+                <span class="navbar-brand-badge">SaaS</span>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-semibold">
+                    <li class="nav-item"><a class="nav-link px-3" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#portals">User Portals</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#academics">40/60 Assessment</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#pricing">Plans & Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#contact">Contact</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-2">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard-router' %}" class="btn btn-green">
+                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        </a>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-custom">Log Out</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-custom">Sign In</a>
+                        <a href="#pricing" class="btn btn-green">Get Started</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <div class="hero-badge">
+                        <i class="bi bi-shield-check"></i> Built Exclusively for Nigerian Primary & Secondary Schools
+                    </div>
+                    <h1 class="hero-title">
+                        Simplify Your School's <span>Academic & Financial</span> Operations.
+                    </h1>
+                    <p class="hero-subtitle mt-3">
+                        A modern, multi-tenant school SaaS with Nigerian Naira (₦) fee collection, automated bursar payment verification, compulsory 40/60 CA grading, and Africa/Lagos attendance reminders.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mt-4 pt-2">
+                        <a href="{% url 'login' %}" class="btn btn-green btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Login to Portal
+                        </a>
+                        <a href="#features" class="btn btn-outline-custom btn-lg">
+                            <i class="bi bi-play-circle me-1"></i> Explore Features
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center gap-4 mt-5 text-muted small fw-semibold">
+                        <div><i class="bi bi-check2-circle text-success me-1"></i> Multi-Tenant Isolation</div>
+                        <div><i class="bi bi-check2-circle text-success me-1"></i> PWA & Mobile Ready</div>
+                        <div><i class="bi bi-check2-circle text-success me-1"></i> Africa/Lagos Automated Reminders</div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-5">
+                    <div class="card shadow-lg border-0 rounded-4 overflow-hidden p-4 bg-white position-relative">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                            <div class="fw-bold text-dark d-flex align-items-center gap-2">
+                                <span class="badge bg-success">Live Demo</span> School Overview
+                            </div>
+                            <span class="text-muted small">Term 1, 2026/2027</span>
+                        </div>
+                        
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded-3">
+                                    <div class="text-muted small">Enrolled Students</div>
+                                    <div class="fs-4 fw-bold text-success">842</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded-3">
+                                    <div class="text-muted small">Fee Recovery (₦)</div>
+                                    <div class="fs-4 fw-bold text-primary">94.8%</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded-3">
+                                    <div class="text-muted small">Today's Roll-Call</div>
+                                    <div class="fs-5 fw-bold text-dark">98.2% Present</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded-3">
+                                    <div class="text-muted small">Assessment Mode</div>
+                                    <div class="fs-5 fw-bold text-warning">40 CA / 60 Exam</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-success d-flex align-items-center gap-2 py-2 px-3 mb-0 small">
+                            <i class="bi bi-bell-fill"></i>
+                            <span>8:30 AM Teacher Attendance reminder sent to 38 staff.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CORE FEATURES SECTION -->
+    <section id="features" class="py-5 bg-light">
+        <div class="container py-4">
+            <div class="text-center max-w-xl mx-auto mb-5">
+                <span class="text-success fw-bold text-uppercase small">Purpose-Built Architecture</span>
+                <h2 class="fw-bold fs-1 mt-1">Designed for Nigerian School Realities</h2>
+                <p class="text-muted">Built from the ground up according to strict Nigerian school administrative requirements.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper icon-green">
+                            <i class="bi bi-building-lock"></i>
+                        </div>
+                        <h4 class="fw-bold fs-5">Strict Multi-Tenancy</h4>
+                        <p class="text-muted small">Every school has a unique tenant identity. URL manipulation, parent data, and student records are strictly isolated at database query level.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper icon-amber">
+                            <i class="bi bi-award"></i>
+                        </div>
+                        <h4 class="fw-bold fs-5">Compulsory 40/60 Assessment</h4>
+                        <p class="text-muted small">Enforces Nigeria's standard 40 marks Continuous Assessment (CA) and 60 marks Examination allocation with custom sub-components and report card printing.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper icon-blue">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+                        <h4 class="fw-bold fs-5">Termly Fee Billing (₦)</h4>
+                        <p class="text-muted small">Create termly fee schedules, apply individual student scholarships or discounts, allow parents to upload teller/transfer evidence, and empower bursars to verify.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper icon-teal">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <h4 class="fw-bold fs-5">Smart Attendance & Verification</h4>
+                        <p class="text-muted small">Daily student attendance with 8:30 AM Africa/Lagos reminders. Teacher self check-in with immutable timestamps, awaiting principal verification.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper icon-purple">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                        <h4 class="fw-bold fs-5">Academic Calendar & Versioning</h4>
+                        <p class="text-muted small">Central Nigerian public holidays combined with school-specific terms. Upload official calendar documents (PDF, DOCX) with revision tracking.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper icon-rose">
+                            <i class="bi bi-phone"></i>
+                        </div>
+                        <h4 class="fw-bold fs-5">PWA & Offline Capability</h4>
+                        <p class="text-muted small">Installable on Android and iOS home screens as a Progressive Web App (PWA). Caches essential assets and works reliably on low-bandwidth networks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- USER PORTALS SECTION -->
+    <section id="portals" class="py-5">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <span class="text-success fw-bold text-uppercase small">Role-Based Experience</span>
+                <h2 class="fw-bold fs-1 mt-1">Dedicated Portals for Every Stakeholder</h2>
+                <p class="text-muted">A clutter-free, role-customized dashboard for teachers, bursars, parents, and principals.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="portal-card h-100">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <i class="bi bi-person-badge text-success fs-3"></i>
+                            <h5 class="fw-bold mb-0">Proprietor & Admin</h5>
+                        </div>
+                        <p class="text-muted small">Manage school registration, tuition pricing, staff permissions, high-level financial reports, and school operations.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="portal-card h-100">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <i class="bi bi-check-circle text-primary fs-3"></i>
+                            <h5 class="fw-bold mb-0">Principal & Head Teacher</h5>
+                        </div>
+                        <p class="text-muted small">Verify teacher check-ins, approve and lock examination results, oversee academic calendar events, and review student progress.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="portal-card h-100">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <i class="bi bi-journal-check text-warning fs-3"></i>
+                            <h5 class="fw-bold mb-0">Teacher Portal</h5>
+                        </div>
+                        <p class="text-muted small">Check-in daily, record class roll calls, enter continuous assessment scores, submit terminal grades, and view assigned class timetables.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="portal-card h-100">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <i class="bi bi-wallet2 text-danger fs-3"></i>
+                            <h5 class="fw-bold mb-0">Bursar & Accountant</h5>
+                        </div>
+                        <p class="text-muted small">Generate term invoices, review uploaded bank transfer slips, approve payments, print official receipts, and audit balances.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="portal-card h-100">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <i class="bi bi-people text-info fs-3"></i>
+                            <h5 class="fw-bold mb-0">Parent & Guardian</h5>
+                        </div>
+                        <p class="text-muted small">Track your children's terminal report cards, pay tuition fees directly to school accounts, upload receipts, and check attendance.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="portal-card h-100">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <i class="bi bi-backpack text-secondary fs-3"></i>
+                            <h5 class="fw-bold mb-0">Student Portal</h5>
+                        </div>
+                        <p class="text-muted small">Check your exam scores, view timetable schedules, download academic calendars, and receive school event announcements.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 40/60 ASSESSMENT SPOTLIGHT -->
+    <section id="academics" class="py-5 bg-light">
+        <div class="container py-4">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <span class="badge bg-success-subtle text-success fw-bold px-3 py-2 mb-3">Compulsory Grading Policy</span>
+                    <h2 class="fw-bold fs-1">Strict Continuous Assessment (40) & Examination (60)</h2>
+                    <p class="text-muted mt-3">
+                        Individual schools cannot tamper with the compulsory 40/60 mark split, guaranteeing academic integrity across the board. Schools can however customize the components that total 40 marks (e.g., Test 1 = 15, Assignment = 10, Project = 10, Attendance = 5).
+                    </p>
+                    <ul class="list-unstyled mt-4 d-flex flex-column gap-3">
+                        <li class="d-flex align-items-start gap-2">
+                            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                            <div><strong>Result Approval Workflow:</strong> Teacher enters scores &rarr; submits for approval &rarr; Principal approves &rarr; Results published and locked.</div>
+                        </li>
+                        <li class="d-flex align-items-start gap-2">
+                            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                            <div><strong>Automated Report Cards:</strong> Downloadable terminal report cards complete with teacher remarks, principal remarks, attendance stats, and grade scale.</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card p-4 border-0 shadow-sm rounded-4 bg-white">
+                        <h5 class="fw-bold mb-3 border-bottom pb-2">Sample Terminal Assessment Scorecard</h5>
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th class="text-center">CA (40)</th>
+                                    <th class="text-center">Exam (60)</th>
+                                    <th class="text-center">Total (100)</th>
+                                    <th class="text-center">Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Mathematics</td>
+                                    <td class="text-center fw-semibold text-primary">36.00</td>
+                                    <td class="text-center fw-semibold text-success">52.00</td>
+                                    <td class="text-center fw-bold">88.00</td>
+                                    <td class="text-center"><span class="badge bg-success">A (Distinction)</span></td>
+                                </tr>
+                                <tr>
+                                    <td>English Language</td>
+                                    <td class="text-center fw-semibold text-primary">32.00</td>
+                                    <td class="text-center fw-semibold text-success">48.00</td>
+                                    <td class="text-center fw-bold">80.00</td>
+                                    <td class="text-center"><span class="badge bg-success">A (Distinction)</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Basic Science</td>
+                                    <td class="text-center fw-semibold text-primary">28.00</td>
+                                    <td class="text-center fw-semibold text-success">44.00</td>
+                                    <td class="text-center fw-bold">72.00</td>
+                                    <td class="text-center"><span class="badge bg-primary">B (Credit)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section id="pricing" class="py-5">
+        <div class="container py-4">
+            <div class="text-center max-w-xl mx-auto mb-5">
+                <span class="text-success fw-bold text-uppercase small">Affordable Subscription Plans</span>
+                <h2 class="fw-bold fs-1 mt-1">Straightforward Termly Pricing (₦)</h2>
+                <p class="text-muted">Pick a plan tailored to your school's student size and administrative needs.</p>
+            </div>
+
+            <div class="row g-4 align-items-center">
+                <!-- Starter -->
+                <div class="col-lg-4">
+                    <div class="pricing-card">
+                        <h4 class="fw-bold mb-1">Starter</h4>
+                        <p class="text-muted small">Ideal for small growing primary or nursery schools.</p>
+                        <div class="d-flex align-items-baseline gap-1 my-4">
+                            <span class="fs-1 fw-bold text-dark">₦50,000</span>
+                            <span class="text-muted">/ term</span>
+                        </div>
+                        <ul class="list-unstyled d-flex flex-column gap-2 small text-muted mb-4">
+                            <li><i class="bi bi-check text-success me-2"></i> Up to 300 Enrolled Students</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Up to 25 Teachers & Staff</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Attendance & 8:30 AM Alerts</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Terminal Report Card Generation</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Standard Email Support</li>
+                        </ul>
+                        <a href="{% url 'login' %}" class="btn btn-outline-custom w-100">Get Started</a>
+                    </div>
+                </div>
+
+                <!-- Standard -->
+                <div class="col-lg-4">
+                    <div class="pricing-card featured">
+                        <div class="pricing-tag">Most Popular</div>
+                        <h4 class="fw-bold mb-1">Standard</h4>
+                        <p class="text-muted small">For established primary & secondary schools.</p>
+                        <div class="d-flex align-items-baseline gap-1 my-4">
+                            <span class="fs-1 fw-bold text-success">₦100,000</span>
+                            <span class="text-muted">/ term</span>
+                        </div>
+                        <ul class="list-unstyled d-flex flex-column gap-2 small text-muted mb-4">
+                            <li><i class="bi bi-check text-success me-2"></i> Up to 800 Enrolled Students</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Up to 60 Teachers & Staff</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Termly Fee Billing & Bursar Verification</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Parent & Student Dedicated Portals</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Official Calendar Document Versioning</li>
+                            <li><i class="bi bi-check text-success me-2"></i> PWA App Offline Mode</li>
+                        </ul>
+                        <a href="{% url 'login' %}" class="btn btn-green w-100">Get Started</a>
+                    </div>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="col-lg-4">
+                    <div class="pricing-card">
+                        <h4 class="fw-bold mb-1">Enterprise</h4>
+                        <p class="text-muted small">For large schools with dual primary & secondary branches.</p>
+                        <div class="d-flex align-items-baseline gap-1 my-4">
+                            <span class="fs-1 fw-bold text-dark">₦180,000</span>
+                            <span class="text-muted">/ term</span>
+                        </div>
+                        <ul class="list-unstyled d-flex flex-column gap-2 small text-muted mb-4">
+                            <li><i class="bi bi-check text-success me-2"></i> Unlimited Students & Teachers</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Dual Section Independent Operations</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Termii SMS Notifications Gateway</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Custom Domain & School Logo Branding</li>
+                            <li><i class="bi bi-check text-success me-2"></i> Priority Phone & On-site Support</li>
+                        </ul>
+                        <a href="{% url 'login' %}" class="btn btn-outline-custom w-100">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact" class="footer-landing">
+        <div class="container">
+            <div class="row g-4 justify-content-between mb-5">
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="bi bi-mortarboard-fill text-success fs-3"></i>
+                        <span class="fs-4 fw-bold text-white">EduNaija SaaS</span>
+                    </div>
+                    <p class="small text-secondary">
+                        A reliable, secure, multi-tenant school management SaaS engineered specifically for Nigerian nursery, primary, and secondary schools.
+                    </p>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Modules</h5>
+                    <ul class="list-unstyled small d-flex flex-column gap-2">
+                        <li><a href="#academics">40/60 Grading</a></li>
+                        <li><a href="#features">Fee Billing (₦)</a></li>
+                        <li><a href="#features">Attendance</a></li>
+                        <li><a href="#features">Calendar</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Portals</h5>
+                    <ul class="list-unstyled small d-flex flex-column gap-2">
+                        <li><a href="{% url 'login' %}">Proprietor</a></li>
+                        <li><a href="{% url 'login' %}">Principal</a></li>
+                        <li><a href="{% url 'login' %}">Teacher</a></li>
+                        <li><a href="{% url 'login' %}">Bursar</a></li>
+                        <li><a href="{% url 'login' %}">Parent</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5>Contact Support</h5>
+                    <p class="small text-secondary mb-2">
+                        <i class="bi bi-envelope me-2"></i> support@edunaija.com.ng
+                    </p>
+                    <p class="small text-secondary mb-2">
+                        <i class="bi bi-geo-alt me-2"></i> Lagos & Abuja, Nigeria
+                    </p>
+                    <p class="small text-secondary">
+                        <i class="bi bi-clock me-2"></i> Mon - Fri, 8:00 AM - 5:00 PM WAT
+                    </p>
+                </div>
+            </div>
+
+            <div class="border-top border-secondary pt-4 text-center small text-secondary">
+                &copy; 2026 EduNaija SaaS. All rights reserved. Complies with Nigerian Educational Guidelines.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

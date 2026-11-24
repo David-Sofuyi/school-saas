@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Proprietor Dashboard{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}"><i class="bi bi-house-door me-1"></i>Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Proprietor Dashboard</li>
+{% endblock %}
+
+{% block page_header %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-dark mb-1">Welcome, {{ user.first_name|default:"Proprietor" }}!</h2>
+        <p class="text-muted mb-0">Executive overview for <strong>{{ user.school.name|default:"Your School" }}</strong></p>
+    </div>
+    <div class="d-flex gap-2 mt-3 mt-sm-0">
+        {% if user.school %}
+        <a href="{% url 'schools:school-settings' pk=user.school.pk %}" class="btn btn-outline-secondary">
+            <i class="bi bi-sliders me-1"></i> Settings
+        </a>
+        {% endif %}
+        <a href="/reports/" class="btn btn-primary">
+            <i class="bi bi-file-earmark-bar-graph me-1"></i> School Reports
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Metric Summary Cards -->
+<div class="row g-3 mb-4">
+    <!-- Students -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-primary">
+            <div>
+                <div class="stat-value">{{ total_students|default:680 }}</div>
+                <div class="stat-label">Enrolled Students</div>
+            </div>
+            <div class="stat-icon icon-primary">
+                <i class="bi bi-people-fill"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teachers -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-green">
+            <div>
+                <div class="stat-value">{{ total_teachers|default:38 }}</div>
+                <div class="stat-label">Teaching Staff</div>
+            </div>
+            <div class="stat-icon icon-green">
+                <i class="bi bi-person-video3"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fee Collection % -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-yellow">
+            <div>
+                <div class="stat-value">{{ fee_collection_pct|default:"76.4%" }}</div>
+                <div class="stat-label">Term Fee Collection</div>
+            </div>
+            <div class="stat-icon icon-yellow">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Today -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-info">
+            <div>
+                <div class="stat-value">{{ attendance_today|default:"94.8%" }}</div>
+                <div class="stat-label">Attendance Today</div>
+            </div>
+            <div class="stat-icon icon-info">
+                <i class="bi bi-check2-square"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Links Grid -->
+<div class="card mb-4">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold">
+            <i class="bi bi-grid-fill text-primary me-2"></i>Quick Management Links
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="/students/" class="quick-action-card text-decoration-none">
+                    <div class="quick-action-icon text-primary"><i class="bi bi-people"></i></div>
+                    <div class="fw-semibold small">Students</div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="/teachers/" class="quick-action-card text-decoration-none">
+                    <div class="quick-action-icon text-success"><i class="bi bi-person-badge"></i></div>
+                    <div class="fw-semibold small">Teachers</div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="/classes/" class="quick-action-card text-decoration-none">
+                    <div class="quick-action-icon text-warning"><i class="bi bi-diagram-3"></i></div>
+                    <div class="fw-semibold small">Classes</div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="/fees/" class="quick-action-card text-decoration-none">
+                    <div class="quick-action-icon text-info"><i class="bi bi-credit-card-2-back"></i></div>
+                    <div class="fw-semibold small">Fee Billing</div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="/attendance/" class="quick-action-card text-decoration-none">
+                    <div class="quick-action-icon text-danger"><i class="bi bi-calendar-check"></i></div>
+                    <div class="fw-semibold small">Attendance</div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <a href="/reports/" class="quick-action-card text-decoration-none">
+                    <div class="quick-action-icon text-dark"><i class="bi bi-bar-chart-line"></i></div>
+                    <div class="fw-semibold small">Reports</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Recent Notifications -->
+    <div class="col-12 col-lg-7">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="bi bi-bell-fill text-warning me-2"></i>Recent Notifications & Alerts
+                </h5>
+                <span class="badge bg-primary-subtle text-primary border">Today</span>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item p-3 d-flex align-items-start">
+                        <div class="p-2 bg-success-subtle text-success rounded-circle me-3">
+                            <i class="bi bi-cash fs-5"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-1 fw-bold">₦250,000 Tuition Payment Verified</h6>
+                                <small class="text-muted">15m ago</small>
+                            </div>
+                            <p class="mb-0 text-muted small">Payment recorded for JSS 2 student Adeleke Tobi via Paystack bank transfer.</p>
+                        </div>
+                    </li>
+                    <li class="list-group-item p-3 d-flex align-items-start">
+                        <div class="p-2 bg-info-subtle text-info rounded-circle me-3">
+                            <i class="bi bi-clipboard2-check fs-5"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-1 fw-bold">Continuous Assessment Uploaded</h6>
+                                <small class="text-muted">1h ago</small>
+                            </div>
+                            <p class="mb-0 text-muted small">Mr. Okon submitted SS 1 Mathematics CA scores (40 marks component).</p>
+                        </div>
+                    </li>
+                    <li class="list-group-item p-3 d-flex align-items-start">
+                        <div class="p-2 bg-warning-subtle text-warning rounded-circle me-3">
+                            <i class="bi bi-chat-text fs-5"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-1 fw-bold">Daily Absence SMS Broadcast Sent</h6>
+                                <small class="text-muted">3h ago</small>
+                            </div>
+                            <p class="mb-0 text-muted small">Termii SMS notifications delivered to 14 guardians of absent pupils.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Events Widget -->
+    <div class="col-12 col-lg-5">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="bi bi-calendar-event-fill text-danger me-2"></i>Upcoming School Events
+                </h5>
+                <a href="/calendar/" class="small text-decoration-none">Calendar &rarr;</a>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center p-3 mb-3 bg-light rounded-3 border-start border-4 border-primary">
+                    <div class="text-center me-3 pe-3 border-end">
+                        <div class="text-danger fw-bold fs-5">DEC</div>
+                        <div class="fw-bold fs-4 lh-1">05</div>
+                    </div>
+                    <div>
+                        <div class="fw-bold">First Term Unified Examinations</div>
+                        <div class="text-muted small">All Primary & Secondary Classes</div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center p-3 mb-3 bg-light rounded-3 border-start border-4 border-success">
+                    <div class="text-center me-3 pe-3 border-end">
+                        <div class="text-danger fw-bold fs-5">DEC</div>
+                        <div class="fw-bold fs-4 lh-1">12</div>
+                    </div>
+                    <div>
+                        <div class="fw-bold">Inter-House Sports Festival</div>
+                        <div class="text-muted small">School Sports Pavilion &bull; 9:00 AM</div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center p-3 bg-light rounded-3 border-start border-4 border-warning">
+                    <div class="text-center me-3 pe-3 border-end">
+                        <div class="text-danger fw-bold fs-5">DEC</div>
+                        <div class="fw-bold fs-4 lh-1">18</div>
+                    </div>
+                    <div>
+                        <div class="fw-bold">End of Term & Carol Service</div>
+                        <div class="text-muted small">School Hall &bull; Vacation begins</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

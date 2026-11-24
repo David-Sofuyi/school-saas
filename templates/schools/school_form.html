@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if object %}Edit {{ object.name }}{% else %}Register New School{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}"><i class="bi bi-house-door me-1"></i>Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'schools:school-list' %}">Schools</a></li>
+    <li class="breadcrumb-item active" aria-current="page">
+        {% if object %}Edit {{ object.name }}{% else %}Register School{% endif %}
+    </li>
+{% endblock %}
+
+{% block page_header %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-dark mb-1">
+            {% if object %}<i class="bi bi-pencil-square text-primary me-2"></i>Edit School: {{ object.name }}
+            {% else %}<i class="bi bi-plus-circle text-primary me-2"></i>Register New School Tenant{% endif %}
+        </h2>
+        <p class="text-muted mb-0">Fill in the institution's information, operating times, and Nigerian contact details</p>
+    </div>
+    <div>
+        <a href="{% if object %}{% url 'schools:school-detail' pk=object.pk %}{% else %}{% url 'schools:school-list' %}{% endif %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Cancel
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-10">
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger shadow-sm">
+                    {% for error in form.non_field_errors %}
+                        <div><i class="bi bi-exclamation-circle-fill me-2"></i>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Section 1: Basic Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0 fw-bold text-dark">
+                        <span class="badge bg-primary me-2">1</span>Basic Information & Identity
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-8">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">School Name <span class="text-danger">*</span></label>
+                            <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}" class="form-control {% if form.name.errors %}is-invalid{% endif %}" value="{{ form.name.value|default:'' }}" required placeholder="e.g. Corona Secondary School">
+                            {% if form.name.errors %}<div class="invalid-feedback">{{ form.name.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label for="{{ form.school_type.id_for_label }}" class="form-label">School Type <span class="text-danger">*</span></label>
+                            <select name="{{ form.school_type.name }}" id="{{ form.school_type.id_for_label }}" class="form-select {% if form.school_type.errors %}is-invalid{% endif %}" required>
+                                {% for val, label in form.fields.school_type.choices %}
+                                    <option value="{{ val }}" {% if form.school_type.value == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if form.school_type.errors %}<div class="invalid-feedback">{{ form.school_type.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="{{ form.motto.id_for_label }}" class="form-label">School Motto</label>
+                            <input type="text" name="{{ form.motto.name }}" id="{{ form.motto.id_for_label }}" class="form-control {% if form.motto.errors %}is-invalid{% endif %}" value="{{ form.motto.value|default:'' }}" placeholder="e.g. Knowledge, Excellence and Integrity">
+                            {% if form.motto.errors %}<div class="invalid-feedback">{{ form.motto.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="{{ form.established_date.id_for_label }}" class="form-label">Date Established</label>
+                            <input type="date" name="{{ form.established_date.name }}" id="{{ form.established_date.id_for_label }}" class="form-control {% if form.established_date.errors %}is-invalid{% endif %}" value="{{ form.established_date.value|date:'Y-m-d'|default:'' }}">
+                            {% if form.established_date.errors %}<div class="invalid-feedback">{{ form.established_date.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12">
+                            <label for="{{ form.logo.id_for_label }}" class="form-label">School Logo Badge</label>
+                            <input type="file" name="{{ form.logo.name }}" id="{{ form.logo.id_for_label }}" class="form-control {% if form.logo.errors %}is-invalid{% endif %}" accept="image/*">
+                            <small class="text-muted">Upload square PNG or JPG, max 10MB.</small>
+                            {% if form.logo.errors %}<div class="invalid-feedback d-block">{{ form.logo.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Contact & Location -->
+            <div class="card mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0 fw-bold text-dark">
+                        <span class="badge bg-secondary me-2">2</span>Contact Details & Location
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label for="{{ form.contact_phone.id_for_label }}" class="form-label">Contact Phone (+234 format) <span class="text-danger">*</span></label>
+                            <input type="text" name="{{ form.contact_phone.name }}" id="{{ form.contact_phone.id_for_label }}" class="form-control {% if form.contact_phone.errors %}is-invalid{% endif %}" value="{{ form.contact_phone.value|default:'' }}" placeholder="+2348012345678" required>
+                            {% if form.contact_phone.errors %}<div class="invalid-feedback">{{ form.contact_phone.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="{{ form.contact_email.id_for_label }}" class="form-label">Official Email <span class="text-danger">*</span></label>
+                            <input type="email" name="{{ form.contact_email.name }}" id="{{ form.contact_email.id_for_label }}" class="form-control {% if form.contact_email.errors %}is-invalid{% endif %}" value="{{ form.contact_email.value|default:'' }}" placeholder="info@school.edu.ng" required>
+                            {% if form.contact_email.errors %}<div class="invalid-feedback">{{ form.contact_email.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="{{ form.city.id_for_label }}" class="form-label">City / Town <span class="text-danger">*</span></label>
+                            <input type="text" name="{{ form.city.name }}" id="{{ form.city.id_for_label }}" class="form-control {% if form.city.errors %}is-invalid{% endif %}" value="{{ form.city.value|default:'' }}" placeholder="e.g. Ikeja" required>
+                            {% if form.city.errors %}<div class="invalid-feedback">{{ form.city.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="{{ form.state.id_for_label }}" class="form-label">State in Nigeria <span class="text-danger">*</span></label>
+                            <input type="text" name="{{ form.state.name }}" id="{{ form.state.id_for_label }}" class="form-control {% if form.state.errors %}is-invalid{% endif %}" value="{{ form.state.value|default:'' }}" placeholder="e.g. Lagos" required>
+                            {% if form.state.errors %}<div class="invalid-feedback">{{ form.state.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12">
+                            <label for="{{ form.address.id_for_label }}" class="form-label">Street Address <span class="text-danger">*</span></label>
+                            <textarea name="{{ form.address.name }}" id="{{ form.address.id_for_label }}" class="form-control {% if form.address.errors %}is-invalid{% endif %}" rows="2" placeholder="Full street address of the school campus..." required>{{ form.address.value|default:'' }}</textarea>
+                            {% if form.address.errors %}<div class="invalid-feedback">{{ form.address.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12">
+                            <label for="{{ form.website.id_for_label }}" class="form-label">Website URL</label>
+                            <input type="url" name="{{ form.website.name }}" id="{{ form.website.id_for_label }}" class="form-control {% if form.website.errors %}is-invalid{% endif %}" value="{{ form.website.value|default:'' }}" placeholder="https://www.yourschool.edu.ng">
+                            {% if form.website.errors %}<div class="invalid-feedback">{{ form.website.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Operating Hours -->
+            <div class="card mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0 fw-bold text-dark">
+                        <span class="badge bg-warning text-dark me-2">3</span>School Operating Schedule
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-4">
+                            <label for="{{ form.resumption_time.id_for_label }}" class="form-label">Resumption Time</label>
+                            <input type="time" name="{{ form.resumption_time.name }}" id="{{ form.resumption_time.id_for_label }}" class="form-control {% if form.resumption_time.errors %}is-invalid{% endif %}" value="{{ form.resumption_time.value|time:'H:i'|default:'07:30' }}">
+                            {% if form.resumption_time.errors %}<div class="invalid-feedback">{{ form.resumption_time.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <label for="{{ form.opening_time.id_for_label }}" class="form-label">Period 1 Opening Time</label>
+                            <input type="time" name="{{ form.opening_time.name }}" id="{{ form.opening_time.id_for_label }}" class="form-control {% if form.opening_time.errors %}is-invalid{% endif %}" value="{{ form.opening_time.value|time:'H:i'|default:'08:00' }}">
+                            {% if form.opening_time.errors %}<div class="invalid-feedback">{{ form.opening_time.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <label for="{{ form.closing_time.id_for_label }}" class="form-label">Dismissal Closing Time</label>
+                            <input type="time" name="{{ form.closing_time.name }}" id="{{ form.closing_time.id_for_label }}" class="form-control {% if form.closing_time.errors %}is-invalid{% endif %}" value="{{ form.closing_time.value|time:'H:i'|default:'16:00' }}">
+                            {% if form.closing_time.errors %}<div class="invalid-feedback">{{ form.closing_time.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <label class="form-label d-block">Working Days</label>
+                            <div class="d-flex flex-wrap gap-3">
+                                {% for choice in form.working_days %}
+                                    <div class="form-check">
+                                        {{ choice.tag }}
+                                        <label class="form-check-label" for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="d-flex justify-content-end gap-2 mb-5">
+                <a href="{% if object %}{% url 'schools:school-detail' pk=object.pk %}{% else %}{% url 'schools:school-list' %}{% endif %}" class="btn btn-outline-secondary px-4">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-primary px-4 fw-bold">
+                    <i class="bi bi-check2-circle me-1"></i> Save School Record
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

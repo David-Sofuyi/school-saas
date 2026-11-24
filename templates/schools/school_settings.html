@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}School Settings | {{ object.school.name }}{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}"><i class="bi bi-house-door me-1"></i>Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'schools:school-list' %}">Schools</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'schools:school-detail' pk=object.school.pk %}">{{ object.school.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Settings</li>
+{% endblock %}
+
+{% block page_header %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-dark mb-1">
+            <i class="bi bi-sliders text-primary me-2"></i>School Settings & Policy
+        </h2>
+        <p class="text-muted mb-0">Configure grading parameters, parent SMS/email alerts, and school brand themes for <strong>{{ object.school.name }}</strong></p>
+    </div>
+    <div>
+        <a href="{% url 'schools:school-detail' pk=object.school.pk %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Back to School Details
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-10">
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger shadow-sm">
+                    {% for error in form.non_field_errors %}
+                        <div><i class="bi bi-exclamation-circle-fill me-2"></i>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Section 1: Standard Nigerian Grading Policy -->
+            <div class="card mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0 fw-bold text-dark">
+                        <i class="bi bi-award-fill text-warning me-2"></i>Academic Assessment & Grading Configuration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small mb-3">
+                        Per standard Nigerian educational guidelines, continuous assessment (CA) and final term examinations are configured as follows:
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-6">
+                            <label class="form-label text-muted small">Continuous Assessment (CA Total)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control bg-light" value="{{ object.ca_total|default:40 }}" readonly>
+                                <span class="input-group-text bg-light text-muted">Marks (40%)</span>
+                            </div>
+                            <small class="text-muted">Includes homework, class tests, and project assignments.</small>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <label class="form-label text-muted small">Terminal Examination (Exam Total)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control bg-light" value="{{ object.exam_total|default:60 }}" readonly>
+                                <span class="input-group-text bg-light text-muted">Marks (60%)</span>
+                            </div>
+                            <small class="text-muted">End-of-term unified examination papers.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Automated Notifications & Attendance Alerts -->
+            <div class="card mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0 fw-bold text-dark">
+                        <i class="bi bi-broadcast text-info me-2"></i>Notification Channels & Automated Reminders
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <div class="form-check form-switch p-3 border rounded-3 bg-light">
+                                <input class="form-check-input ms-0 me-3" type="checkbox" role="switch" name="{{ form.enable_sms.name }}" id="{{ form.enable_sms.id_for_label }}" {% if form.enable_sms.value %}checked{% endif %}>
+                                <label class="form-check-label fw-bold" for="{{ form.enable_sms.id_for_label }}">
+                                    Enable SMS Notifications (Termii Gateway)
+                                </label>
+                                <div class="text-muted small mt-1">
+                                    Send immediate SMS to parents for student attendance, emergencies, and fee payment receipts.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="form-check form-switch p-3 border rounded-3 bg-light">
+                                <input class="form-check-input ms-0 me-3" type="checkbox" role="switch" name="{{ form.enable_email.name }}" id="{{ form.enable_email.id_for_label }}" {% if form.enable_email.value %}checked{% endif %}>
+                                <label class="form-check-label fw-bold" for="{{ form.enable_email.id_for_label }}">
+                                    Enable Email Notifications
+                                </label>
+                                <div class="text-muted small mt-1">
+                                    Send report cards, fee bills, and newsletters via school branded emails.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <label for="{{ form.attendance_reminder_time.id_for_label }}" class="form-label">Teacher Attendance Reminder Time</label>
+                            <input type="time" name="{{ form.attendance_reminder_time.name }}" id="{{ form.attendance_reminder_time.id_for_label }}" class="form-control {% if form.attendance_reminder_time.errors %}is-invalid{% endif %}" value="{{ form.attendance_reminder_time.value|time:'H:i'|default:'08:30' }}">
+                            <small class="text-muted">Nudges class teachers if roll call is not taken by this time.</small>
+                            {% if form.attendance_reminder_time.errors %}<div class="invalid-feedback">{{ form.attendance_reminder_time.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <label for="{{ form.absence_notification_time.id_for_label }}" class="form-label">Parent Absence Notification Dispatch Time</label>
+                            <input type="time" name="{{ form.absence_notification_time.name }}" id="{{ form.absence_notification_time.id_for_label }}" class="form-control {% if form.absence_notification_time.errors %}is-invalid{% endif %}" value="{{ form.absence_notification_time.value|time:'H:i'|default:'09:00' }}">
+                            <small class="text-muted">Sends automated SMS/push notification to parents of unmarked or absent pupils.</small>
+                            {% if form.absence_notification_time.errors %}<div class="invalid-feedback">{{ form.absence_notification_time.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Branding & Display Customization -->
+            <div class="card mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0 fw-bold text-dark">
+                        <i class="bi bi-palette-fill text-primary me-2"></i>School Brand Colors
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-6">
+                            <label for="{{ form.primary_color.id_for_label }}" class="form-label">Primary Brand Color</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="color" name="{{ form.primary_color.name }}" id="{{ form.primary_color.id_for_label }}" class="form-control form-control-color" value="{{ form.primary_color.value|default:'#1a73e8' }}" title="Choose school primary color">
+                                <input type="text" class="form-control" value="{{ form.primary_color.value|default:'#1a73e8' }}" readonly style="max-width: 120px;">
+                            </div>
+                            <small class="text-muted">Used for headings, main buttons, and report card banners.</small>
+                            {% if form.primary_color.errors %}<div class="invalid-feedback d-block">{{ form.primary_color.errors.0 }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <label for="{{ form.secondary_color.id_for_label }}" class="form-label">Secondary Brand Color</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="color" name="{{ form.secondary_color.name }}" id="{{ form.secondary_color.id_for_label }}" class="form-control form-control-color" value="{{ form.secondary_color.value|default:'#34a853' }}" title="Choose school secondary color">
+                                <input type="text" class="form-control" value="{{ form.secondary_color.value|default:'#34a853' }}" readonly style="max-width: 120px;">
+                            </div>
+                            <small class="text-muted">Used for success highlights, badges, and accents.</small>
+                            {% if form.secondary_color.errors %}<div class="invalid-feedback d-block">{{ form.secondary_color.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-flex justify-content-end gap-2 mb-5">
+                <a href="{% url 'schools:school-detail' pk=object.school.pk %}" class="btn btn-outline-secondary px-4">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-primary px-4 fw-bold">
+                    <i class="bi bi-save me-1"></i> Save School Settings
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

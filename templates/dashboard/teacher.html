@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}"><i class="bi bi-house-door me-1"></i>Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Teacher Dashboard</li>
+{% endblock %}
+
+{% block page_header %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-dark mb-1">Teacher Portal</h2>
+        <p class="text-muted mb-0">Welcome back, <strong>{{ user.get_full_name|default:user.email }}</strong> &bull; {{ user.school.name|default:"School Portal" }}</p>
+    </div>
+    <div class="d-flex gap-2 mt-3 mt-sm-0">
+        <a href="/attendance/take/" class="btn btn-success">
+            <i class="bi bi-check2-circle me-1"></i> Take Today's Attendance
+        </a>
+        <a href="/academics/scores/entry/" class="btn btn-primary">
+            <i class="bi bi-pencil-square me-1"></i> Enter CA / Exam Scores
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Quick Stat Banner -->
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-primary">
+            <div>
+                <div class="stat-value">{{ assigned_classes_count|default:4 }}</div>
+                <div class="stat-label">Assigned Classes</div>
+            </div>
+            <div class="stat-icon icon-primary"><i class="bi bi-collection"></i></div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-green">
+            <div>
+                <div class="stat-value">{{ attendance_status_summary|default:"Marked" }}</div>
+                <div class="stat-label">Morning Attendance</div>
+            </div>
+            <div class="stat-icon icon-green"><i class="bi bi-calendar2-check"></i></div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-yellow">
+            <div>
+                <div class="stat-value">{{ pending_results_count|default:2 }}</div>
+                <div class="stat-label">Pending Subject Results</div>
+            </div>
+            <div class="stat-icon icon-yellow"><i class="bi bi-clipboard2-data"></i></div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-info">
+            <div>
+                <div class="stat-value">{{ total_students_taught|default:145 }}</div>
+                <div class="stat-label">Total Pupils Taught</div>
+            </div>
+            <div class="stat-icon icon-info"><i class="bi bi-people"></i></div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- My Classes List -->
+    <div class="col-12 col-lg-7">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="bi bi-collection-fill text-primary me-2"></i>My Classes & Subjects
+                </h5>
+                <a href="/classes/my-classes/" class="small text-decoration-none">View All &rarr;</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Subject</th>
+                                <th>Student Count</th>
+                                <th>Attendance Today</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold">JSS 2 Alpha</td>
+                                <td>Mathematics</td>
+                                <td>38 Students</td>
+                                <td><span class="badge badge-active">36 Present</span></td>
+                                <td>
+                                    <a href="/attendance/take/?class=jss2a" class="btn btn-sm btn-outline-primary py-0">Take Roll</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">JSS 2 Beta</td>
+                                <td>Mathematics</td>
+                                <td>40 Students</td>
+                                <td><span class="badge badge-active">39 Present</span></td>
+                                <td>
+                                    <a href="/attendance/take/?class=jss2b" class="btn btn-sm btn-outline-primary py-0">Take Roll</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">SSS 1 Gold</td>
+                                <td>Further Mathematics</td>
+                                <td>28 Students</td>
+                                <td><span class="badge badge-pending">Pending</span></td>
+                                <td>
+                                    <a href="/attendance/take/?class=ss1g" class="btn btn-sm btn-primary py-0">Mark Roll</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">SSS 2 Science</td>
+                                <td>Further Mathematics</td>
+                                <td>32 Students</td>
+                                <td><span class="badge badge-active">31 Present</span></td>
+                                <td>
+                                    <a href="/attendance/take/?class=ss2s" class="btn btn-sm btn-outline-primary py-0">Take Roll</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Results Entry -->
+    <div class="col-12 col-lg-5">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="bi bi-clock-history text-warning me-2"></i>Pending Results Entry
+                </h5>
+                <span class="badge bg-warning-subtle text-warning border">Term 1</span>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning py-2 px-3 small d-flex align-items-center mb-3">
+                    <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
+                    <div>CA Scores (40 marks) deadline is Friday, 12:00 PM.</div>
+                </div>
+
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">JSS 2 Alpha &bull; Continuous Assessment</div>
+                            <div class="text-muted small">24 of 38 scores submitted</div>
+                            <div class="progress mt-1" style="height: 6px; width: 180px;">
+                                <div class="progress-bar bg-primary" style="width: 63%;"></div>
+                            </div>
+                        </div>
+                        <a href="/academics/scores/entry/?id=1" class="btn btn-sm btn-outline-primary">Continue</a>
+                    </div>
+                    <div class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">SSS 1 Gold &bull; CA Test 2</div>
+                            <div class="text-muted small">0 of 28 scores submitted</div>
+                            <div class="progress mt-1" style="height: 6px; width: 180px;">
+                                <div class="progress-bar bg-danger" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <a href="/academics/scores/entry/?id=2" class="btn btn-sm btn-primary">Start Entry</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upcoming Events Widget -->
+<div class="card">
+    <div class="card-header bg-white py-3">
+        <h5 class="card-title mb-0 fw-bold">
+            <i class="bi bi-calendar-event text-danger me-2"></i>Academic Calendar & Events
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-12 col-md-4">
+                <div class="p-3 border rounded-3 bg-light">
+                    <span class="badge bg-danger mb-2">Academic Deadline</span>
+                    <h6 class="fw-bold mb-1">Submission of Examination Question Papers</h6>
+                    <p class="text-muted small mb-0">Due by December 1st to the Examination Committee.</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="p-3 border rounded-3 bg-light">
+                    <span class="badge bg-primary mb-2">School Event</span>
+                    <h6 class="fw-bold mb-1">Open Day & Parent-Teacher Meeting</h6>
+                    <p class="text-muted small mb-0">Wednesday, Dec 3 &bull; 10:00 AM - 2:00 PM</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="p-3 border rounded-3 bg-light">
+                    <span class="badge bg-success mb-2">Revision Week</span>
+                    <h6 class="fw-bold mb-1">Term 1 Revision Classes</h6>
+                    <p class="text-muted small mb-0">All teachers should conclude term syllabi by Nov 30.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

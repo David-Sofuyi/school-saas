@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}"><i class="bi bi-house-door me-1"></i>Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Student Dashboard</li>
+{% endblock %}
+
+{% block page_header %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-dark mb-1">Hello, {{ user.first_name|default:"Student" }}!</h2>
+        <p class="text-muted mb-0">Welcome to your student portal &bull; <strong>{{ user.school.name|default:"SchoolMS Nigeria" }}</strong></p>
+    </div>
+    <div class="d-flex gap-2 mt-3 mt-sm-0">
+        <a href="/academics/my-results/" class="btn btn-primary">
+            <i class="bi bi-award me-1"></i> View My Report Card
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Student Performance Metric Cards -->
+<div class="row g-3 mb-4">
+    <!-- Academic Average -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-primary">
+            <div>
+                <div class="stat-value">{{ academic_average|default:"84.5%" }}</div>
+                <div class="stat-label">Term Cumulative Average</div>
+            </div>
+            <div class="stat-icon icon-primary"><i class="bi bi-award-fill"></i></div>
+        </div>
+    </div>
+
+    <!-- Attendance Percentage -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-green">
+            <div>
+                <div class="stat-value">{{ attendance_pct|default:"98.0%" }}</div>
+                <div class="stat-label">Term Attendance Rate</div>
+            </div>
+            <div class="stat-icon icon-green"><i class="bi bi-calendar2-check-fill"></i></div>
+        </div>
+    </div>
+
+    <!-- Class Position -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-yellow">
+            <div>
+                <div class="stat-value">{{ class_position|default:"3rd" }}</div>
+                <div class="stat-label">Class Position (of 38)</div>
+            </div>
+            <div class="stat-icon icon-yellow"><i class="bi bi-trophy-fill"></i></div>
+        </div>
+    </div>
+
+    <!-- Enrolled Subjects -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card stat-card stat-info">
+            <div>
+                <div class="stat-value">{{ subjects_count|default:11 }}</div>
+                <div class="stat-label">Enrolled Subjects</div>
+            </div>
+            <div class="stat-icon icon-info"><i class="bi bi-journal-text"></i></div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Upcoming Exams & Timetable -->
+    <div class="col-12 col-lg-7">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="bi bi-pencil-fill text-danger me-2"></i>Upcoming Examinations Timetable
+                </h5>
+                <span class="badge bg-danger-subtle text-danger">Unified Exams</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Venue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold">Mathematics</td>
+                                <td>Monday, Dec 5</td>
+                                <td>09:00 AM - 11:30 AM</td>
+                                <td>Main Hall Desk 14</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">English Language</td>
+                                <td>Tuesday, Dec 6</td>
+                                <td>09:00 AM - 11:30 AM</td>
+                                <td>Main Hall Desk 14</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Basic Science & Tech</td>
+                                <td>Wednesday, Dec 7</td>
+                                <td>10:00 AM - 12:00 PM</td>
+                                <td>Science Lab 2</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Social Studies & Civic Education</td>
+                                <td>Thursday, Dec 8</td>
+                                <td>09:00 AM - 11:00 AM</td>
+                                <td>Main Hall Desk 14</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Yoruba / Igbo / Hausa</td>
+                                <td>Friday, Dec 9</td>
+                                <td>09:00 AM - 11:00 AM</td>
+                                <td>Classroom JSS 2A</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Announcements -->
+    <div class="col-12 col-lg-5">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="bi bi-megaphone-fill text-primary me-2"></i>School Announcements
+                </h5>
+                <span class="badge bg-light text-muted border">Noticeboard</span>
+            </div>
+            <div class="card-body">
+                <div class="mb-3 p-3 bg-light rounded-3 border-start border-4 border-primary">
+                    <div class="d-flex justify-content-between mb-1">
+                        <strong class="text-dark small">School Library Hours Extended</strong>
+                        <span class="text-muted small">Yesterday</span>
+                    </div>
+                    <p class="text-muted small mb-0">The school library is now open until 5:00 PM for all students preparing for first term examinations.</p>
+                </div>
+
+                <div class="mb-3 p-3 bg-light rounded-3 border-start border-4 border-success">
+                    <div class="d-flex justify-content-between mb-1">
+                        <strong class="text-dark small">Science & Jet Club Exhibition</strong>
+                        <span class="text-muted small">Nov 26</span>
+                    </div>
+                    <p class="text-muted small mb-0">Junior and Senior projects are due for exhibition on Friday in the ICT center.</p>
+                </div>
+
+                <div class="p-3 bg-light rounded-3 border-start border-4 border-warning">
+                    <div class="d-flex justify-content-between mb-1">
+                        <strong class="text-dark small">Uniform Inspection</strong>
+                        <span class="text-muted small">Nov 24</span>
+                    </div>
+                    <p class="text-muted small mb-0">Proper school uniform and ID cards must be worn at all times during morning assemblies.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

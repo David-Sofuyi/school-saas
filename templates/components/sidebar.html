@@ -1,0 +1,212 @@
+{% load static %}
+<aside class="app-sidebar" id="appSidebar">
+    <!-- Sidebar Header with Brand/Badge -->
+    <div class="sidebar-header d-flex align-items-center justify-content-between">
+        <a href="{% url 'accounts:dashboard' %}" class="d-flex align-items-center text-decoration-none">
+            <div class="bg-success text-white rounded p-1 px-2 me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                <i class="bi bi-mortarboard-fill fs-5"></i>
+            </div>
+            <div class="d-flex flex-column">
+                <span class="fw-bold text-dark lh-1" style="font-size: 1rem;">SchoolMS</span>
+                <span class="text-muted small" style="font-size: 0.7rem;">Nigeria Cloud</span>
+            </div>
+        </a>
+        <button type="button" class="btn-close d-lg-none" id="sidebarCloseBtn" onclick="document.getElementById('appSidebar').classList.remove('show'); document.getElementById('sidebarBackdrop').classList.remove('show');" aria-label="Close"></button>
+    </div>
+
+    <!-- Navigation Items -->
+    <div class="sidebar-nav">
+        {% if user.is_authenticated %}
+            <!-- Superuser Navigation -->
+            {% if user.is_superuser or user.is_platform_superuser or user.user_type == 'superuser' %}
+                <div class="sidebar-heading">Platform Superuser</div>
+                <a href="{% url 'accounts:dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="{% url 'schools:school-list' %}" class="sidebar-link {% if 'schools' in request.path %}active{% endif %}">
+                    <i class="bi bi-buildings"></i> Schools
+                </a>
+                <a href="/subscriptions/" class="sidebar-link {% if 'subscriptions' in request.path %}active{% endif %}">
+                    <i class="bi bi-credit-card"></i> Subscriptions
+                </a>
+                <a href="/calendar/public-holidays/" class="sidebar-link {% if 'holidays' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar-event"></i> Public Holidays
+                </a>
+                <a href="/audit/logs/" class="sidebar-link {% if 'audit' in request.path %}active{% endif %}">
+                    <i class="bi bi-shield-check"></i> Audit Logs
+                </a>
+                <a href="/settings/" class="sidebar-link {% if 'settings' in request.path %}active{% endif %}">
+                    <i class="bi bi-gear"></i> Platform Settings
+                </a>
+
+            <!-- Proprietor Navigation -->
+            {% elif user.user_type == 'proprietor' %}
+                <div class="sidebar-heading">School Proprietor</div>
+                <a href="{% url 'accounts:dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="/students/" class="sidebar-link {% if 'students' in request.path %}active{% endif %}">
+                    <i class="bi bi-people"></i> Students
+                </a>
+                <a href="/parents/" class="sidebar-link {% if 'parents' in request.path %}active{% endif %}">
+                    <i class="bi bi-person-heart"></i> Parents
+                </a>
+                <a href="/teachers/" class="sidebar-link {% if 'teachers' in request.path %}active{% endif %}">
+                    <i class="bi bi-person-video3"></i> Teachers
+                </a>
+                <a href="/classes/" class="sidebar-link {% if 'classes' in request.path %}active{% endif %}">
+                    <i class="bi bi-diagram-3"></i> Classes
+                </a>
+                <a href="/academics/" class="sidebar-link {% if 'academics' in request.path %}active{% endif %}">
+                    <i class="bi bi-journal-bookmark"></i> Academics
+                </a>
+                <a href="/attendance/" class="sidebar-link {% if 'attendance' in request.path %}active{% endif %}">
+                    <i class="bi bi-check2-square"></i> Attendance
+                </a>
+                <a href="/calendar/" class="sidebar-link {% if 'calendar' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar3"></i> Calendar
+                </a>
+                <a href="/fees/" class="sidebar-link {% if 'fees' in request.path %}active{% endif %}">
+                    <i class="bi bi-cash-stack"></i> Fees
+                </a>
+                <a href="/payments/" class="sidebar-link {% if 'payments' in request.path %}active{% endif %}">
+                    <i class="bi bi-wallet2"></i> Payments
+                </a>
+                <a href="/reports/" class="sidebar-link {% if 'reports' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-bar-graph"></i> Reports
+                </a>
+                {% if user.school %}
+                <a href="{% url 'schools:school-settings' pk=user.school.pk %}" class="sidebar-link {% if 'settings' in request.path %}active{% endif %}">
+                    <i class="bi bi-sliders"></i> School Settings
+                </a>
+                {% endif %}
+
+            <!-- Principal / Admin Navigation -->
+            {% elif user.user_type == 'principal' or user.user_type == 'admin' %}
+                <div class="sidebar-heading">Principal Administration</div>
+                <a href="{% url 'accounts:dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="/students/" class="sidebar-link {% if 'students' in request.path %}active{% endif %}">
+                    <i class="bi bi-people"></i> Students
+                </a>
+                <a href="/teachers/" class="sidebar-link {% if 'teachers' in request.path %}active{% endif %}">
+                    <i class="bi bi-person-video3"></i> Teachers
+                </a>
+                <a href="/attendance/" class="sidebar-link {% if 'attendance' in request.path %}active{% endif %}">
+                    <i class="bi bi-check2-square"></i> Attendance
+                </a>
+                <a href="/academics/" class="sidebar-link {% if 'academics' in request.path %}active{% endif %}">
+                    <i class="bi bi-journal-bookmark"></i> Academics
+                </a>
+                <a href="/calendar/" class="sidebar-link {% if 'calendar' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar3"></i> Calendar
+                </a>
+                <a href="/reports/" class="sidebar-link {% if 'reports' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-bar-graph"></i> Reports
+                </a>
+
+            <!-- Teacher Navigation -->
+            {% elif user.user_type == 'teacher' %}
+                <div class="sidebar-heading">Teacher Portal</div>
+                <a href="{% url 'accounts:dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="/classes/my-classes/" class="sidebar-link {% if 'classes' in request.path %}active{% endif %}">
+                    <i class="bi bi-collection"></i> My Classes
+                </a>
+                <a href="/attendance/" class="sidebar-link {% if 'attendance' in request.path %}active{% endif %}">
+                    <i class="bi bi-check2-square"></i> Attendance
+                </a>
+                <a href="/academics/results/" class="sidebar-link {% if 'results' in request.path %}active{% endif %}">
+                    <i class="bi bi-clipboard2-check"></i> Results
+                </a>
+                <a href="/calendar/" class="sidebar-link {% if 'calendar' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar3"></i> Calendar
+                </a>
+
+            <!-- Bursar Navigation -->
+            {% elif user.user_type == 'bursar' %}
+                <div class="sidebar-heading">Bursary & Accounts</div>
+                <a href="{% url 'accounts:dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="/fees/bills/" class="sidebar-link {% if 'bills' in request.path %}active{% endif %}">
+                    <i class="bi bi-receipt"></i> Fee Bills
+                </a>
+                <a href="/payments/" class="sidebar-link {% if 'payments' in request.path %}active{% endif %}">
+                    <i class="bi bi-cash"></i> Payments
+                </a>
+                <a href="/payments/receipts/" class="sidebar-link {% if 'receipts' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-text"></i> Receipts
+                </a>
+                <a href="/reports/financial/" class="sidebar-link {% if 'reports' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-bar-graph"></i> Reports
+                </a>
+
+            <!-- Parent Navigation -->
+            {% elif user.user_type == 'parent' %}
+                <div class="sidebar-heading">Parent Portal</div>
+                <a href="{% url 'accounts:dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="/parents/children/" class="sidebar-link {% if 'children' in request.path %}active{% endif %}">
+                    <i class="bi bi-people-fill"></i> My Children
+                </a>
+                <a href="/fees/my-fees/" class="sidebar-link {% if 'fees' in request.path %}active{% endif %}">
+                    <i class="bi bi-credit-card-2-front"></i> Fees
+                </a>
+                <a href="/payments/history/" class="sidebar-link {% if 'payments' in request.path %}active{% endif %}">
+                    <i class="bi bi-receipt-cutoff"></i> Payments
+                </a>
+                <a href="/calendar/" class="sidebar-link {% if 'calendar' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar-event"></i> Calendar
+                </a>
+
+            <!-- Student Navigation -->
+            {% elif user.user_type == 'student' %}
+                <div class="sidebar-heading">Student Portal</div>
+                <a href="{% url 'accounts:dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="/academics/my-results/" class="sidebar-link {% if 'results' in request.path %}active{% endif %}">
+                    <i class="bi bi-award"></i> Results
+                </a>
+                <a href="/attendance/my-attendance/" class="sidebar-link {% if 'attendance' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar-check"></i> Attendance
+                </a>
+                <a href="/calendar/" class="sidebar-link {% if 'calendar' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar3"></i> Calendar
+                </a>
+
+            <!-- Default / Fallback Navigation -->
+            {% else %}
+                <div class="sidebar-heading">Navigation</div>
+                <a href="{% url 'accounts:dashboard' %}" class="sidebar-link active">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a href="{% url 'accounts:profile' %}" class="sidebar-link">
+                    <i class="bi bi-person"></i> Profile
+                </a>
+            {% endif %}
+
+        {% else %}
+            <!-- Anonymous Visitor -->
+            <div class="sidebar-heading">Welcome</div>
+            <a href="{% url 'accounts:login' %}" class="sidebar-link">
+                <i class="bi bi-box-arrow-in-right"></i> Log In
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+        {% if user.is_authenticated and user.school %}
+            <div class="text-truncate fw-semibold text-dark">{{ user.school.name }}</div>
+            <div class="text-muted small text-truncate">{{ user.school.city }}, {{ user.school.state }}</div>
+        {% else %}
+            <div class="text-truncate fw-semibold text-dark">SchoolMS Nigeria</div>
+            <div class="text-muted small">v1.0 &bull; Cloud SaaS</div>
+        {% endif %}
+    </div>
+</aside>

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Log In{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="/"><i class="bi bi-house-door me-1"></i>Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Log In</li>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center py-4">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <!-- Green Nigerian Header Banner -->
+            <div class="p-4 text-center text-white" style="background: linear-gradient(135deg, #008751 0%, #1a73e8 100%);">
+                <div class="bg-white text-success rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm mb-3" style="width: 64px; height: 64px;">
+                    <i class="bi bi-mortarboard-fill fs-2" style="color: #008751;"></i>
+                </div>
+                <h4 class="fw-bold mb-1">SchoolMS Nigeria</h4>
+                <p class="mb-0 opacity-75 small">Secure Portal Sign In</p>
+            </div>
+
+            <div class="card-body p-4 p-md-4">
+                <form method="post" action="{% url 'accounts:login' %}" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger py-2 px-3 small rounded-3">
+                            {% for error in form.non_field_errors %}
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-exclamation-circle-fill me-2"></i>{{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Email Field -->
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            <input type="email" name="username" autofocus autocapitalize="none" autocomplete="email" maxlength="254" required id="id_username" class="form-control border-start-0 ps-0 {% if form.username.errors %}is-invalid{% endif %}" placeholder="name@school.edu.ng" value="{{ form.username.value|default:'' }}">
+                        </div>
+                        {% if form.username.errors %}
+                            <div class="invalid-feedback d-block small">
+                                {{ form.username.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label for="id_password" class="form-label mb-0">Password</label>
+                            <a href="#forgotPasswordModal" data-bs-toggle="modal" class="small text-decoration-none text-muted">Forgot password?</a>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input type="password" name="password" autocomplete="current-password" required id="id_password" class="form-control border-start-0 ps-0 {% if form.password.errors %}is-invalid{% endif %}" placeholder="Enter your password">
+                        </div>
+                        {% if form.password.errors %}
+                            <div class="invalid-feedback d-block small">
+                                {{ form.password.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Remember Me Checkbox -->
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" name="remember_me" id="rememberMe">
+                        <label class="form-check-label text-muted small" for="rememberMe">
+                            Keep me logged in on this device
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-success btn-lg shadow-sm fw-bold" style="background-color: #008751; border-color: #008751;">
+                            <i class="bi bi-box-arrow-in-right me-2"></i> Log In to Portal
+                        </button>
+                    </div>
+
+                    <div class="text-center text-muted small mt-3">
+                        Having issues signing in? Contact your school administrator or bursar.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Forgot Password Help -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title" id="forgotPasswordModalLabel"><i class="bi bi-key-fill text-primary me-2"></i>Password Assistance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>To reset your school portal password, please reach out to your school's administrative office or IT support.</p>
+                <div class="p-3 bg-light rounded-3 small">
+                    <strong>For Teachers & Students:</strong> Your class teacher or principal can initiate a password reset.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

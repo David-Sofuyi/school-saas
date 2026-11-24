@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Parent Portal Dashboard{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}"><i class="bi bi-house-door me-1"></i>Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Parent Dashboard</li>
+{% endblock %}
+
+{% block page_header %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold text-dark mb-1">Parent & Guardian Portal</h2>
+        <p class="text-muted mb-0">Track your children's academic performance, fee bills, attendance, and school notices</p>
+    </div>
+    <div class="d-flex gap-2 mt-3 mt-sm-0">
+        <a href="/fees/pay/" class="btn btn-success">
+            <i class="bi bi-wallet2 me-1"></i> Pay School Fees
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Children Summary Cards -->
+<div class="mb-4">
+    <h5 class="fw-bold mb-3"><i class="bi bi-people-fill text-primary me-2"></i>My Enrolled Children</h5>
+    <div class="row g-3">
+        <!-- Child 1 -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card h-100 p-3">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center fw-bold fs-4 me-3" style="width: 56px; height: 56px;">
+                        TA
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0">Tobi Adeleke</h6>
+                        <span class="badge bg-light text-dark border">JSS 2 Alpha</span>
+                        <div class="text-muted small">Reg: SCH/2023/048</div>
+                    </div>
+                </div>
+                <div class="small text-muted mb-3">
+                    <div class="d-flex justify-content-between py-1 border-bottom">
+                        <span>Attendance this Term:</span>
+                        <span class="fw-bold text-success">98% (49/50 days)</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1 border-bottom">
+                        <span>Current Class Rank:</span>
+                        <span class="fw-bold text-primary">3rd of 38</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span>Term Fee Status:</span>
+                        <span class="badge bg-success-subtle text-success">Fully Paid</span>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-auto">
+                    <a href="/academics/results/?student=1" class="btn btn-outline-primary btn-sm flex-grow-1">
+                        <i class="bi bi-file-earmark-text me-1"></i> Report Card
+                    </a>
+                    <a href="/attendance/?student=1" class="btn btn-outline-secondary btn-sm flex-grow-1">
+                        <i class="bi bi-calendar-check me-1"></i> Attendance
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Child 2 -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card h-100 p-3">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle bg-warning-subtle text-warning d-flex align-items-center justify-content-center fw-bold fs-4 me-3" style="width: 56px; height: 56px;">
+                        CA
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0">Chidinma Adeleke</h6>
+                        <span class="badge bg-light text-dark border">Primary 4 Diamond</span>
+                        <div class="text-muted small">Reg: SCH/2025/112</div>
+                    </div>
+                </div>
+                <div class="small text-muted mb-3">
+                    <div class="d-flex justify-content-between py-1 border-bottom">
+                        <span>Attendance this Term:</span>
+                        <span class="fw-bold text-success">96% (48/50 days)</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1 border-bottom">
+                        <span>Current Class Rank:</span>
+                        <span class="fw-bold text-primary">5th of 30</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span>Term Fee Status:</span>
+                        <span class="badge bg-danger-subtle text-danger">₦25,000 Balance</span>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-auto">
+                    <a href="/academics/results/?student=2" class="btn btn-outline-primary btn-sm flex-grow-1">
+                        <i class="bi bi-file-earmark-text me-1"></i> Report Card
+                    </a>
+                    <a href="/fees/pay/?student=2" class="btn btn-danger btn-sm flex-grow-1">
+                        <i class="bi bi-credit-card me-1"></i> Pay Balance
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Outstanding Fees Summary -->
+    <div class="col-12 col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="bi bi-cash-coin text-success me-2"></i>School Fees & Billing Summary
+                </h5>
+                <span class="badge bg-success-subtle text-success">Term 1 2026/2027</span>
+            </div>
+            <div class="card-body">
+                <div class="p-3 bg-light rounded-3 mb-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Total Outstanding Balance</div>
+                        <div class="fs-3 fw-bold text-danger">₦25,000.00</div>
+                    </div>
+                    <div>
+                        <a href="/fees/pay/" class="btn btn-success fw-bold">
+                            <i class="bi bi-credit-card-2-front me-1"></i> Pay Now via Paystack
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Child</th>
+                                <th>Bill Item</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tobi Adeleke</td>
+                                <td>Tuition & ICT Levy</td>
+                                <td>₦120,000</td>
+                                <td><span class="badge badge-active">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>Chidinma Adeleke</td>
+                                <td>Tuition & Books</td>
+                                <td>₦95,000</td>
+                                <td><span class="badge badge-pending">₦25,000 Due</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Results & Events -->
+    <div class="col-12 col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="card-title mb-0 fw-bold">
+                    <i class="bi bi-journal-check text-primary me-2"></i>Recent Assessment Scores
+                </h5>
+                <span class="badge bg-primary-subtle text-primary">Continuous Assessment</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h6 class="fw-bold mb-0">Tobi &bull; JSS 2 Mathematics Test 2</h6>
+                            <span class="badge bg-success fs-6">36 / 40</span>
+                        </div>
+                        <p class="small text-muted mb-0">Algebraic Equations &bull; Grade: <strong>A</strong> &bull; Teacher: Mr. Okon</p>
+                    </div>
+                    <div class="list-group-item p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h6 class="fw-bold mb-0">Tobi &bull; JSS 2 Basic Science</h6>
+                            <span class="badge bg-primary fs-6">32 / 40</span>
+                        </div>
+                        <p class="small text-muted mb-0">Living and Non-Living Things &bull; Grade: <strong>B+</strong></p>
+                    </div>
+                    <div class="list-group-item p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h6 class="fw-bold mb-0">Chidinma &bull; Primary 4 English Studies</h6>
+                            <span class="badge bg-success fs-6">38 / 40</span>
+                        </div>
+                        <p class="small text-muted mb-0">Spelling & Reading Comprehension &bull; Grade: <strong>A+</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

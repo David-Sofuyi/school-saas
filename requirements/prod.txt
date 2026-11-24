@@ -1,0 +1,7 @@
+-r base.txt
+
+# PostgreSQL driver
+psycopg2-binary>=2.9
+
+# Error tracking
+sentry-sdk>=1.40

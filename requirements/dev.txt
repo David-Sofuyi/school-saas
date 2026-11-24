@@ -1,0 +1,14 @@
+-r base.txt
+
+# Debug
+django-debug-toolbar>=4.3
+
+# Testing
+factory-boy>=3.3
+faker>=22.0
+pytest>=8.0
+pytest-django>=4.8
+coverage>=7.4
+
+# Linting
+flake8>=7.0
